@@ -1,0 +1,18 @@
+---
+description: Core architecture and repository boundaries for Sajtagent Platform
+alwaysApply: true
+---
+
+# Sajtagent Platform
+
+Read and follow `/AGENTS.md`; it is the canonical instruction file shared by
+Cursor, Codex, and external reviewers.
+
+- This is a thinner, clearer version 2 of the ideas proven in Sajtmaskin.
+- SiteAgent is the whole web product: `/` is home and `/builder` is its Builder.
+- Reuse proven behavior when it saves code, but do not inherit legacy
+  complexity, internal endpoints, data models, or LLM flows by default.
+- The root, `sajtagent-site/`, and `sajtagent-sprites/` are separate Git boundaries.
+- `_reference/` is informal, potentially stale material and never a source of
+  truth or authority.
+- Prefer one small verified vertical slice over a broad rewrite.

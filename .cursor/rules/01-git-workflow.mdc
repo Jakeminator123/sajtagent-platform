@@ -1,0 +1,19 @@
+---
+description: Main branch, worktree safety, and final response status
+alwaysApply: true
+---
+
+# Git workflow
+
+- `main` is the standard branch in every Sajtagent repository.
+- If the user says `master`, ask whether they really mean `master` before any branch, push, merge, deploy, or worktree action.
+- Never infer that `master` means `main` or create a `master` branch without confirmation.
+- Keep commits and pushes separate for the platform, site, and sprites repositories.
+- Never remove a dirty, locked, unpushed, active-PR, running, or otherwise unique worktree.
+- Use `scripts/worktree-maintenance.ps1` from the platform repository for cleanup.
+- End every final response with live status in this exact shape for every repository touched:
+
+```text
+Branch: <branch>
+Worktree: <absolute path>
+```

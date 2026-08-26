@@ -1,0 +1,21 @@
+# The product and runtime are independent nested repositories.
+/sajtagent-site/
+/sajtagent-sprites/
+
+# This folder is intentionally disposable. Only its warning is versioned.
+/_reference/*
+!/_reference/README.md
+
+# Local Python and Streamlit state.
+.venv/
+__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.ruff_cache/
+/.streamlit/secrets.toml
+
+# Local configuration and output.
+.env
+.env.local
+.env.*.local
+*.log
