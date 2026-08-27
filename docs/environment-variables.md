@@ -43,3 +43,20 @@ secret store for preview/production.
 Future product GitHub App and Vercel publication variables should be added only
 when their typed adapters exist. Prefer short-lived installation credentials
 and provider secret stores over personal access tokens.
+
+## Active Supabase project
+
+- Name: `sajtagent`
+- Project ref: `ywoltuegeemqznbcgokg`
+- Region: `eu-north-1`
+- Owner: `sajtagent-site`
+- Dashboard: <https://supabase.com/dashboard/project/ywoltuegeemqznbcgokg>
+
+The local project URL and modern publishable key belong only in the ignored
+`sajtagent-site/.env.local`. The tracked `.env.example` contains variable names
+without values. A database password, direct Postgres URL, secret key, or
+service-role key must never be committed.
+
+This project is isolated from `jakebase`, `jakembase_dev`, and `spelsajt`.
+Sajtagent must not reuse their database connection strings, migrations, or
+server credentials.
