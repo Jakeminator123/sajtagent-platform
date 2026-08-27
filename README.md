@@ -1,64 +1,28 @@
-# Sajtagent Platform
+# Sajtagent Platform — legacy snapshot
 
-Sajtagent Platform is the shared workspace around a thinner, clearer version 2
-of the ideas that work well in Sajtmaskin. The goal is to reuse proven behavior
-without copying the old product's internal structure or heavy LLM pipeline.
+This repository is a historical coordination and architecture snapshot. It is
+not an active Sajtagent repository, product runtime, deployment target, or
+source of truth.
 
-## Canonical repository map
+## Canonical home
 
-| Repository | Status | Owns | Deployment |
-| --- | --- | --- | --- |
-| [`sajtagent-platform`](https://github.com/Jakeminator123/sajtagent-platform) | Active coordination root | Cross-repository decisions, local read-only control panel, maintenance | Not a product runtime |
-| [`sajtagent-site`](https://github.com/Jakeminator123/sajtagent-site) | Active product repository | SiteAgent web product, Builder, Supabase-backed product state, preview presentation, Vercel publication | Vercel project `sajtagent-site`, branch `main` |
-| [`sajtagent-sprites`](https://github.com/Jakeminator123/sajtagent-sprites) | Active runtime repository | Privileged OpenClaw/controller work, isolated project Sprites, tools, checks, preview runtime | Separate server-side runtime; never the browser/Vercel frontend |
-| [`builder-v2`](https://github.com/Jakeminator123/builder-v2) | Legacy predecessor | Historical prototype only | Do not target its GitHub or Vercel project for new Sajtagent work |
+All current Sajtagent work belongs in
+[`Jakeminator123/sajtagent-site`](https://github.com/Jakeminator123/sajtagent-site).
 
-`builder-v2` and `sajtmaskin` are reference history, not dependencies or
-deployment targets. New product work goes to exactly one of the three active
-repositories above. Never commit a child repository from the platform root or
-combine changes from several repositories in one commit.
+That single repository separates the product into clear surfaces:
 
-## Repository boundaries
+| Surface | Canonical location |
+| --- | --- |
+| SiteAgent web product and Builder | `sajtagent-site/app`, `components`, and `lib/siteagent` |
+| Privileged controller, OpenClaw, and Sprite runtime | `sajtagent-site/runtime` |
+| Architecture and platform decisions | `sajtagent-site/docs` |
+| Local maintenance and control utilities | `sajtagent-site/tools` when needed |
 
-This folder contains three independent Git repositories:
+Accepted decisions from this repository are being consolidated into
+`sajtagent-site/docs`. Do not add features, secrets, deployments, or new
+architecture decisions here. The read-only control panel and older documents
+remain reference material only and may be removed after the consolidation is
+verified.
 
-| Folder | Responsibility | Git repository |
-| --- | --- | --- |
-| `./` | Platform decisions, local control panel, and maintenance | `sajtagent-platform` |
-| `sajtagent-site/` | SiteAgent web product and Builder | `sajtagent-site` |
-| `sajtagent-sprites/` | Privileged agent, OpenClaw, and Sprite runtime | `sajtagent-sprites` |
-
-The two child repositories are intentionally ignored by the platform repo. A
-fresh clone of `sajtagent-platform` does not download them automatically; clone
-each repository separately into the folder shown above.
-
-## Start here
-
-- [Architecture](docs/ARCHITECTURE.md)
-- [Migration decisions](docs/migration-from-sajtmaskin.md)
-- [Change and PR workflow](docs/workflow/README.md)
-- [Model-provider boundary](docs/model-provider-boundary.md)
-- [MCP and integration baseline](docs/mcp-and-integrations.md)
-- [Goal and agent workflow](docs/agent-workflow.md)
-- [Development environments](docs/development-environments.md)
-- [Environment-variable ownership](docs/environment-variables.md)
-- [Sprites and OpenClaw proving runbook](docs/sprites-runbook.md)
-- [Documentation index](docs/README.md)
-- [Agent instructions](AGENTS.md)
-
-`_reference/` and every `NOTES.md` are working material. They may contain good
-ideas, open questions, or stale assumptions, but they are not accepted
-architecture until the decision has been rewritten under `docs/`.
-
-## Local control panel
-
-The first control panel is deliberately read-only:
-
-```powershell
-py -m venv control-panel\.venv
-.\control-panel\.venv\Scripts\python.exe -m pip install -r control-panel\requirements.txt
-.\control-panel\.venv\Scripts\python.exe control-panel\app.py
-```
-
-It reports repository state and architecture boundaries. It does not deploy,
-write production data, execute customer code, or own the OpenAI client.
+Legacy repositories `sajtagent-platform`, `sajtagent-sprites`, and
+`builder-v2` must not be treated as parallel sources of truth.
