@@ -37,6 +37,9 @@ repository's executable contract.
 
 ## Model providers and tools
 
+- Read `.cursor/rules/05-secrets-and-vercel-env.mdc` before changing env files,
+  Vercel configuration, provider credentials, or Supabase keys. Prefer no
+  secret; never expose one through Git, prompts, logs, or `NEXT_PUBLIC_*`.
 - The Streamlit control panel and Site frontend must not own privileged OpenAI
   or Anthropic clients. Product provider credentials belong server-side in the
   runtime and are never used by Codex/Cursor development subagents.

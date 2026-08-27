@@ -60,3 +60,28 @@ service-role key must never be committed.
 This project is isolated from `jakebase`, `jakembase_dev`, and `spelsajt`.
 Sajtagent must not reuse their database connection strings, migrations, or
 server credentials.
+
+## Vercel delivery
+
+- Team: `jakeminator123s-projects`
+- Project: `sajtagent-site`
+- Project ID: `prj_hMs2VN2gnj9YU42ZDcEv9U8fOpKf`
+- Git source: `Jakeminator123/sajtagent-site`, branch `main`
+- Framework: Next.js
+- Node.js: `24.x`
+- Install command: `npm ci`
+
+The Vercel project currently receives only public Supabase configuration in
+Production, Preview, and Development:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_PROJECT_REF`
+
+All three are Vercel `Config` values, not secrets. No database URL, database
+password, Supabase secret/service-role key, OpenAI key, Anthropic key, GitHub
+token, Sprite token, or OpenClaw token is configured in the site project.
+
+The local `.vercel/project.json` link and short-lived `VERCEL_OIDC_TOKEN` are
+Git-ignored. Prefer OIDC over a static Vercel token. Never target the legacy
+Vercel project `builder-v2` from this repository.
