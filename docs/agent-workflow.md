@@ -2,6 +2,18 @@
 
 Status: accepted working method, 2026-08-27.
 
+## Development agents are not product agents
+
+The roles in `.codex/agents/` and `.cursor/agents/` are optional development
+helpers. They use the active Codex or Cursor session to edit or inspect code.
+They are not shipped with SiteAgent and do not consume the product's OpenAI or
+Anthropic API credentials.
+
+The actual SiteAgent product agents will be implemented in
+`sajtagent-sprites`, use Jakob's own server-side provider credentials, and run
+through the bounded runtime/controller contract described in
+`model-provider-boundary.md`.
+
 Use one primary agent as coordinator and delegate by repository. Do not open
 uncoordinated agents with broad prompts: all agents share the filesystem, so
 two writers in the same repository can silently overwrite or invalidate each
@@ -14,7 +26,7 @@ other's evidence.
 | Primary agent | Platform root and integration decisions | Owns the goal, sequence, contracts, and final account of delivery. |
 | `site_worker` / `site-worker` | `sajtagent-site` only | Implements the web product and Builder side of one vertical slice. |
 | `sprites_worker` / `sprites-worker` | `sajtagent-sprites` only | Implements the privileged runtime side of that slice. |
-| `integration_reviewer` / `integration-reviewer` | Read-only across all three repositories | Verifies the joined path after the writers finish. |
+| `integration_reviewer` / `integration-reviewer` | Read-only across all three repositories | Optional development-only check of the joined path; it is not a product agent. |
 
 Codex definitions live under `.codex/agents/`; Cursor definitions live under
 `.cursor/agents/`. The Codex concurrency cap is three spawned agents, matching
@@ -22,7 +34,9 @@ two independent writers plus one reviewer while the primary agent coordinates.
 
 ## Before starting `/goal`
 
-1. Complete restricted Sprites OAuth and verify it with `/mcp verbose`.
+1. Complete restricted Sprites OAuth. In an interactive Codex CLI session, use
+   `/mcp verbose`; from plain PowerShell, use `codex mcp list`. The connection
+   was already verified on Jakob's current machine on 2026-08-27.
 2. State whether the run may create one disposable Sprite. Creation, public
    exposure, restore, destruction, deployment, and database writes are separate
    permissions; do not infer one from another.

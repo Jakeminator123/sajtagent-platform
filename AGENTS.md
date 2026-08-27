@@ -35,12 +35,14 @@ repository's executable contract.
 - Add dependencies, services, repositories, and abstraction layers only for a demonstrated requirement.
 - Preserve useful Sajtmaskin behavior conceptually, but give this platform its own names, data model, and API contracts.
 
-## OpenAI and tools
+## Model providers and tools
 
-- The Streamlit control panel must not own the privileged OpenAI client.
+- The Streamlit control panel and Site frontend must not own privileged OpenAI
+  or Anthropic clients. Product provider credentials belong server-side in the
+  runtime and are never used by Codex/Cursor development subagents.
 - Tool grants are server-owned, project/job-scoped, short-lived, auditable, and limited by policy, mandate, and job mode.
 - Validate tool inputs strictly. A model request may narrow authority but never create or expand it.
-- Read `docs/openai-client-boundary.md` before implementing model orchestration.
+- Read `docs/model-provider-boundary.md` before implementing model orchestration.
 - Read `docs/mcp-and-integrations.md` before changing MCP or account bindings.
   Global developer MCPs are not product runtime dependencies, and the
   Sajtmaskin-scoped Vercel connection must not be used for Sajtagent.
@@ -56,6 +58,17 @@ repository's executable contract.
 - Never let two agents write in the same repository concurrently.
 - Cloud creation, deletion, restore, exposure, deployment, and data writes each
   require explicit scope in the active request or goal.
+
+## Development and runtime environments
+
+- Read `docs/development-environments.md` before adding scripts, setup commands,
+  filesystem paths, or process execution.
+- Development defaults to Windows and PowerShell 7. Git Bash is an optional,
+  explicitly labeled compatibility shell; it does not prove Linux behavior.
+- Sprites and deployed workers run Linux/Bash. Use portable path/process APIs,
+  exact filename casing, UTF-8 without BOM, and LF for runtime files.
+- Use CRLF only for Windows-only `.ps1`, `.cmd`, and `.bat` entrypoints. Verify
+  cross-platform changes on Windows plus Linux CI or a disposable Sprite.
 
 ## Git workflow and verification
 

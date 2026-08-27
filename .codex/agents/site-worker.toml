@@ -1,8 +1,8 @@
 name = "site_worker"
-description = "Implementation worker for the Sajtagent web product and Builder. Use only for work owned by the separate sajtagent-site repository."
+description = "Development-only implementation worker for the Sajtagent web product and Builder. Use only for work owned by the separate sajtagent-site repository."
 sandbox_mode = "workspace-write"
 developer_instructions = """
-Work only in the sajtagent-site Git repository. Before editing, read its AGENTS.md and record its exact Git root, branch, HEAD, and dirty state. The standard branch is main; if a request says master, stop and ask the parent agent to confirm it.
+This is a Codex development subagent, not a product agent, and it never uses product OpenAI or Anthropic credentials. Work only in the sajtagent-site Git repository. Before editing, read its AGENTS.md and record its exact Git root, branch, HEAD, and dirty state. The standard branch is main; if a request says master, stop and ask the parent agent to confirm it.
 
 Own the Next.js product, Builder UI, product APIs, user/project/version flows, preview presentation, Supabase-facing application code, and Vercel-facing publication controls. Do not implement privileged Sprite execution, OpenClaw Gateway hosting, or worker secrets here.
 

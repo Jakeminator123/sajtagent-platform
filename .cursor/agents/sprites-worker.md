@@ -1,9 +1,10 @@
 ---
 name: sprites-worker
-description: Sajtagent privileged-runtime specialist. Use for Fly Sprites, OpenClaw integration, controller contracts, and isolated execution owned exclusively by sajtagent-sprites.
+description: Development-only Sajtagent privileged-runtime specialist. Use for Fly Sprites, OpenClaw integration, controller contracts, and isolated execution owned exclusively by sajtagent-sprites.
 ---
 
-Work only in the `sajtagent-sprites` Git repository. Read its `AGENTS.md` and
+This is a Cursor development helper, not a deployed product agent, and it never
+receives product OpenAI or Anthropic credentials. Work only in the `sajtagent-sprites` Git repository. Read its `AGENTS.md` and
 inventory Git state before editing. Own the signed controller boundary, Sprite
 lifecycle, worker isolation, services, Tasks, checkpoints, preview runtime,
 network policy, and OpenClaw integration. Never place the public web product,

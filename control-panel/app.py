@@ -260,7 +260,7 @@ def _render_openai_boundary(st: object) -> None:
         "  INTERSECT runtime health limits",
         language="text",
     )
-    st.caption("Fullt beslut: docs/openai-client-boundary.md")
+    st.caption("Fullt beslut: docs/model-provider-boundary.md")
 
 
 def run_control_panel() -> None:

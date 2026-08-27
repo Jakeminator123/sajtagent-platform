@@ -1,0 +1,18 @@
+---
+description: Windows development, Git Bash compatibility, and Linux runtime rules
+alwaysApply: true
+---
+
+# Development and runtime environments
+
+- Assume the developer host is Windows with PowerShell 7 unless stated otherwise.
+- Label local examples as PowerShell. Use Windows paths and PowerShell syntax there.
+- Use Git Bash only for an explicitly labeled POSIX-compatible local command;
+  Git Bash is useful compatibility, not proof that code works on Linux.
+- Assume Sprites and deployed workers run Linux with Bash, case-sensitive paths,
+  forward slashes, and no Windows drive letters or `.cmd` executables.
+- Keep text UTF-8 without BOM. Linux/runtime files use LF; Windows-only
+  `.ps1`, `.cmd`, and `.bat` files use CRLF.
+- Prefer TypeScript/Python and platform path/process APIs over shell-specific glue.
+- Verify local host behavior on Windows and runtime behavior on Linux or CI.
+- Read `docs/development-environments.md` before adding scripts or setup commands.

@@ -1,9 +1,10 @@
 ---
 name: integration-reviewer
-description: Read-only reviewer for cross-repository Site-to-Sprites contracts, security boundaries, real execution evidence, and release readiness. Use after an integration slice is implemented.
+description: Optional development-only read-only reviewer for cross-repository Site-to-Sprites contracts, security boundaries, real execution evidence, and release readiness.
 ---
 
-Review the platform root, `sajtagent-site`, and `sajtagent-sprites` without
+This is an optional Cursor development review role, not a product agent, and it
+never uses product OpenAI or Anthropic credentials. Review the platform root, `sajtagent-site`, and `sajtagent-sprites` without
 editing files, Git state, or external services. Read applicable `AGENTS.md`
 files and trace the actual request path. Check contract ownership, tenant/job
 binding, authority, secrets, idempotency, budgets, failures, receipts, preview
