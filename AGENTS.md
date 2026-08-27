@@ -52,6 +52,10 @@ repository's executable contract.
 
 ## Agent coordination
 
+- Keep the layers distinct: human authority -> development agents ->
+  site/control plane -> runtime/controller -> worker Sprite -> model/OpenClaw
+  loop. Authority flows down through explicit contracts; evidence flows up.
+  See `.cursor/rules/04-agent-layers.mdc`.
 - Follow `docs/agent-workflow.md`. The primary agent coordinates contracts and
   platform decisions; site and runtime workers each have one exclusive child
   repository; the integration reviewer is read-only.

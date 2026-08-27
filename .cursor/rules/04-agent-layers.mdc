@@ -1,0 +1,15 @@
+---
+description: Authority boundaries between the platform's agent layers
+alwaysApply: true
+---
+
+# Agent layers
+
+1. **Human owner** sets intent and authorizes consequential changes.
+2. **Development agents** (Codex/Cursor) edit and review code; they are not part of the shipped product and never receive product provider credentials.
+3. **Site/control plane** (`sajtagent-site`) owns users, projects, requests, previews, and publishing controls.
+4. **Runtime/controller** (`sajtagent-sprites`) owns provider clients, authorization, tool grants, budgets, jobs, and receipts.
+5. **Worker Sprite** is an isolated Linux workspace that executes one bounded project/job without controller secrets.
+6. **Model/OpenClaw loop** reasons and requests allowed tools; it never grants authority or declares deterministic success.
+
+Authority flows downward through explicit contracts; evidence and receipts flow upward. Never collapse these layers or expose runtime credentials to the browser or development agents.
