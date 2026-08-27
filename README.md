@@ -4,6 +4,20 @@ Sajtagent Platform is the shared workspace around a thinner, clearer version 2
 of the ideas that work well in Sajtmaskin. The goal is to reuse proven behavior
 without copying the old product's internal structure or heavy LLM pipeline.
 
+## Canonical repository map
+
+| Repository | Status | Owns | Deployment |
+| --- | --- | --- | --- |
+| [`sajtagent-platform`](https://github.com/Jakeminator123/sajtagent-platform) | Active coordination root | Cross-repository decisions, local read-only control panel, maintenance | Not a product runtime |
+| [`sajtagent-site`](https://github.com/Jakeminator123/sajtagent-site) | Active product repository | SiteAgent web product, Builder, Supabase-backed product state, preview presentation, Vercel publication | Vercel project `sajtagent-site`, branch `main` |
+| [`sajtagent-sprites`](https://github.com/Jakeminator123/sajtagent-sprites) | Active runtime repository | Privileged OpenClaw/controller work, isolated project Sprites, tools, checks, preview runtime | Separate server-side runtime; never the browser/Vercel frontend |
+| [`builder-v2`](https://github.com/Jakeminator123/builder-v2) | Legacy predecessor | Historical prototype only | Do not target its GitHub or Vercel project for new Sajtagent work |
+
+`builder-v2` and `sajtmaskin` are reference history, not dependencies or
+deployment targets. New product work goes to exactly one of the three active
+repositories above. Never commit a child repository from the platform root or
+combine changes from several repositories in one commit.
+
 ## Repository boundaries
 
 This folder contains three independent Git repositories:
