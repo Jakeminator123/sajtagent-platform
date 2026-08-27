@@ -23,6 +23,58 @@ The hosted Sprites MCP is an operator/development interface. The production
 browser must call SiteAgent, which calls a bounded controller API. It must not
 receive Sprites OAuth authority or an organization token.
 
+## Product edit and live-preview loop
+
+Assign one persistent project Sprite to an active project by default. Each user
+prompt becomes a new `BuildJob` against the current `WorkspaceRevision`; it does
+not require a new Sprite or a Vercel deployment.
+
+The OpenClaw product agent should be autonomous inside that assigned workspace:
+it may inspect and edit project files, install allowed dependencies, run bounded
+commands and checks, inspect logs, and start or restart the preview. Its system
+message must include the project brief, current revision, accepted requirements,
+available tools, limits, and definition of done. Prompt instructions alone are
+not guardrails: the controller must enforce the effective grant on every tool
+call and prevent access to other projects, Sprites, credentials, and control
+plane code.
+
+Run the project preview as a Sprite **Service** so it returns after a cold wake.
+Use a short-lived **Task** while an agent job or build must remain active. The
+service should expose one stable project preview endpoint while successive
+verified revisions change what it renders.
+
+Sprite URLs are organization-private by default and public mode has no built-in
+end-user authentication. Therefore the Builder iframe should use a platform-
+owned, authenticated preview-session URL that proxies to the private Sprite
+service. SiteAgent authorizes the session; the gateway may run with the
+controller if that is the smallest reliable place for HTTP streaming and
+WebSocket proxying. Never place an organization token in the iframe, and do not
+switch the whole Sprite to public merely to make embedding easy. The preview
+gateway must authorize user plus project and support the HTTP/WebSocket behavior
+required by the selected development server.
+
+On completion, return a typed `BuildResult` containing at least the new
+`WorkspaceRevision`, preview-session reference, checks, changed-file summary,
+terminal status, and receipts. A follow-up prompt starts another bounded job on
+the same current revision and workspace; it must not rely on hidden model memory
+as the source of truth.
+
+## Git and publication boundary
+
+- Keep a Git repository inside each project Sprite and commit every verified
+  user-visible version. Do not commit half-applied intermediate tool actions.
+- Prefer a private GitHub repository as the durable remote when a scoped
+  SiteAgent GitHub App is available. It is a mirror/history boundary, not the
+  active filesystem and not a reason to grant the Sprite broad GitHub access.
+- Keep GitHub optional at job-execution time so a temporary provider outage does
+  not destroy or block the current workspace. Queue or retry a failed mirror.
+- Do not deploy to Vercel after every follow-up prompt. The live Builder preview
+  comes from the Sprite. Publish a selected verified commit to Vercel only after
+  explicit product/user intent; optional Vercel preview deployments are durable
+  review milestones, not the inner edit loop.
+- Developer MCP OAuth sessions are never product credentials. Production GitHub
+  and Vercel actions use separately scoped server-side installations.
+
 ## Local state verified
 
 - Fly CLI is installed.
