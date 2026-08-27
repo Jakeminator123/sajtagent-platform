@@ -1,0 +1,7 @@
+
+Vi måste skilja på olika saker. Först kommer det finnas en mapp för dokumentation som gäller era agenter, vilket kan vara i Codex, Cursor eller eventuellt GitHub. Vi kommer också ha dokumentation för hela repot, som kan placeras i roten under "documents". Dessutom kan vi senare ha dokumentation för respektive undermapp som representerar en avdelning inom plattformen. Instruktioner för Sprite-agenten kommer också att behövas, men det är något vi tar senare.
+Vi ka också skilja på "scripts"försjälva sajten och för själva open claw/sprite
+All typ ac cashe elelr "skit" såsom .tempfiler etc ska in i mappen "skit"
+Jag är inte bra på GitHub och har svårt med kommandon som att byta brancher och worktrees. Det har ställt till det för mig när jag jobbat i Cursor. Jag har valt en förenklad väg och nu är det bara värre; jag har lärt mig lite mer men är fortfarande dålig. Kan man inte få det att fungera smidigt? Det här ska ner i workflow-mappen, men jag vet inte hur. Dessutom måste vi sätta upp tester och validering av att PR:er uppfyller vissa krav. Jag har skrivit in det här, men vet inte var det ska placeras kanoniskt.
+
+Jag tänker som en pokerspelare och ser projekt som ett filträd med mappar och undermappar. Jag är ny på programmering och förstår att det inte alltid är så man strukturerar ett repo, så jag föreslår att vi kan kompromissa här.

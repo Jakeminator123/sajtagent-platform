@@ -1,0 +1,1 @@
+Jag vill ha en mapp som heter "Python backoffice", kopplad till mappar där scheman kan valideras. Den ska vara korrekt och smidigare än i sajtmaskin.

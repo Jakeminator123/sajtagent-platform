@@ -13,3 +13,7 @@ py -m venv control-panel\.venv
 ```
 
 The script relaunches itself through Streamlit when run directly.
+
+The future `python-backoffice/` area is intentionally not implemented yet. A
+writable backoffice must use the same authenticated validation and domain APIs
+as the product; it must not make direct production or catalog file edits.

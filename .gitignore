@@ -19,3 +19,9 @@ __pycache__/
 .env.local
 .env.*.local
 *.log
+desktop.ini
+.sprite
+
+# User-owned disposable scratch space. Keep only its warning in Git.
+/skit/*
+!/skit/README.md

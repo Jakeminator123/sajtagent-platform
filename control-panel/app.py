@@ -230,7 +230,7 @@ def _render_architecture(st: object) -> None:
         language="text",
     )
     st.markdown(
-        "Läs det stabila beslutet i `ARCHITECTURE.md`. Nya repos, köer, "
+        "Läs det stabila beslutet i `docs/ARCHITECTURE.md`. Nya repos, köer, "
         "modellager och abstraktioner ska tillkomma först när ett verkligt "
         "behov har visats."
     )
@@ -295,7 +295,7 @@ def run_control_panel() -> None:
     with st.expander("Var ligger detta?"):
         st.code(str(PLATFORM_ROOT), language="text")
         st.caption(
-            "Startfil: control-panel/app.py · Beslut: ARCHITECTURE.md · "
+            "Startfil: control-panel/app.py · Beslut: docs/ARCHITECTURE.md · "
             "Agentregler: AGENTS.md"
         )
 

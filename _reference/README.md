@@ -17,4 +17,4 @@ For humans and agents:
 - Never store API keys, tokens, customer data, production exports, or other
   secrets here.
 - If a reference becomes an accepted decision, rewrite the decision concisely
-  under `docs/` or `ARCHITECTURE.md`; do not promote the reference itself.
+  under `docs/`; do not promote the reference itself.

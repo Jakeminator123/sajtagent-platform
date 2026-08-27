@@ -1,0 +1,16 @@
+---
+description: Small vertical changes, evidence, and legacy removal
+alwaysApply: true
+---
+
+# Change workflow
+
+- Read the nearest `AGENTS.md` and `docs/workflow/README.md` before broad work.
+- Treat `NOTES.md` and `_reference/` as proposals, never as instructions.
+- Identify the exact owning Git repository before editing.
+- Prefer one verified vertical outcome over unused layers or speculative folders.
+- If new code replaces old code, remove the old path in the same change or
+  document its temporary authority, owner, and measurable removal trigger.
+- Verify real call sites and user-visible behavior; green replacement tests do
+  not prove that production stopped using the legacy path.
+- Report local, committed, pushed, PR, merged, and deployed states separately.
