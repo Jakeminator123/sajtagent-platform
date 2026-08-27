@@ -27,6 +27,7 @@ each repository separately into the folder shown above.
 - [MCP and integration baseline](docs/mcp-and-integrations.md)
 - [Goal and agent workflow](docs/agent-workflow.md)
 - [Development environments](docs/development-environments.md)
+- [Environment-variable ownership](docs/environment-variables.md)
 - [Sprites and OpenClaw proving runbook](docs/sprites-runbook.md)
 - [Documentation index](docs/README.md)
 - [Agent instructions](AGENTS.md)

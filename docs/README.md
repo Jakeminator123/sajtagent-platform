@@ -24,6 +24,8 @@ the repository that owns a feature remain the strongest source of truth.
   roles and the recommended bounded `/goal` objective.
 - [Development environments](development-environments.md) — Windows,
   PowerShell, Git Bash, Linux/Sprites, paths, encoding, and line endings.
+- [Environment-variable ownership](environment-variables.md) — separate local
+  env files, secret boundaries, and developer connection separation.
 - [Git and worktrees](git-workflow.md) — branch policy and guarded maintenance.
 - [Governance](governance/README.md) — future schemas, policies, and manifests.
 - [Logging and telemetry](logg-and-telemetry/README.md) — observability ownership,
