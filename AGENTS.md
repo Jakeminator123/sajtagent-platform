@@ -63,8 +63,22 @@ repository's executable contract.
   platform decisions; site and runtime workers each have one exclusive child
   repository; the integration reviewer is read-only.
 - Never let two agents write in the same repository concurrently.
+- Use `/kom <agent-or-task> <message>` to contact an existing agent through the
+  available direct channel. The command never creates a new agent and falls
+  back to a secret-free local coordination note only when live delivery is
+  unavailable.
 - Cloud creation, deletion, restore, exposure, deployment, and data writes each
   require explicit scope in the active request or goal.
+
+## Executable system map
+
+- `system-model/platform-flow-v1.json` is the canonical cross-repository flow
+  model. `docs/system-flow.md` is generated from it; never edit the generated
+  diagrams independently.
+- Use the control panel's Systemflöde and Kortflöde views to trace commands,
+  bottom-up evidence, ownership and failure impact.
+- A changed flow, contract boundary or card responsibility must update the
+  owning model and pass its validator before PR or push evidence is green.
 
 ## Development and runtime environments
 

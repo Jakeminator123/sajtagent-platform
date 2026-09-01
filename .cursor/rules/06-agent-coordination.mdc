@@ -1,0 +1,24 @@
+---
+description: Direct, bounded coordination between agents working in Sajtagent repositories
+alwaysApply: true
+---
+
+# Agent coordination
+
+- Before writing, identify the exact Git root, file scope, active agents and
+  uncommitted overlap. One repository has at most one active writer.
+- Prefer the available direct agent or task channel. Send four short fields:
+  task, files/area, what and why, and the next potentially conflicting action.
+- `/kom <agent-or-task> <message>` invokes the project skill `kom` and means:
+  contact that existing agent now, then report whether the message was sent.
+- Do not create a new agent merely to satisfy `/kom`. Ask Jakob if no intended
+  recipient can be identified safely.
+- If direct messaging is unavailable, write a secret-free temporary note under
+  `.agents/coordination/<agent-id>.md` and tell the user that delivery is not
+  live. Remove or mark it complete when ownership ends.
+- On overlap, pause the overlapping edit and agree on ownership, ordering or a
+  compatible split. Never overwrite, stage, commit or rewrite another agent's
+  work without agreement.
+- Use repository authority, typed contracts and tests when one option is
+  clearly stronger. Ask Jakob when materially different options remain about
+  equally defensible or change security, data, product scope or cloud state.

@@ -11,9 +11,9 @@ bounded server-side APIs and credentials at runtime.
 
 | Capability | Placement | Current state | Sajtagent rule |
 | --- | --- | --- | --- |
-| OpenAI developer documentation | Global Codex and Cursor MCP, `openai-docs` | Configured and callable | Use for current OpenAI and Codex behavior. |
-| OpenClaw documentation | Global Codex and Cursor MCP, `openclaw-docs` | Configured and callable | Documentation only; it is not an OpenClaw Gateway. |
-| Versioned library/cloud documentation | Global Codex and Cursor MCP, `context7` | Configured and callable | Prefer it for current SDK and service documentation. |
+| OpenAI developer documentation | Project and global Codex/Cursor MCP, `openai-docs` | Configured and callable | Use for current OpenAI and Codex behavior. |
+| OpenClaw documentation | Project and global Codex/Cursor MCP, `openclaw-docs` | Configured and callable | Documentation only; it is not an OpenClaw Gateway. |
+| Versioned library/cloud documentation | Project and global Codex/Cursor MCP, `context7` | Configured and callable | Prefer it for current SDK and service documentation. |
 | Fly Sprites operator tools | Global Codex and Cursor MCP, `sprites` | Configured at `https://sprites.dev/mcp`; Codex OAuth verified, Cursor authenticates separately on first use | Keep restricted access, a Sajtagent-specific name prefix, and a small Sprite cap. |
 | GitHub | Codex GitHub plugin | Callable as `Jakeminator123` | Confirm the exact repository before writes. |
 | Vercel | Codex Vercel plugin | Callable for team `jakeminator123s-projects` | Resolve the exact Sajtagent project before writes or deployment. |
@@ -25,15 +25,24 @@ valid Sajtagent connection. Do not use its project scope here. The generic
 `user-vercel` entry was not logged in during this verification; the installed
 Vercel plugin was independently callable.
 
-## Why these are global
+## Project-pinned documentation MCPs
 
-- Codex user configuration lives in `~/.codex/config.toml`.
-- Cursor user configuration lives in `~/.cursor/mcp.json`.
-- Both products support project-level configuration, but a committed project
-  file would duplicate these cross-project documentation tools and could
-  override a developer's safer global settings.
-- Project-level MCP configuration is appropriate only for a portable,
-  secret-free server that is genuinely part of this project's workflow.
+The three secret-free documentation services are committed in project config so
+the accepted architecture and contract workflow remains portable when a repo is
+opened without Jakob's global setup:
+
+- Codex: `.codex/config.toml`
+- Cursor: `.cursor/mcp.json`
+
+Codex keeps an explicit tool allowlist and prompts before tools run. Cursor uses
+the same three remote documentation endpoints. Authentication, tokens and
+account-specific integrations remain global or server-side and must never be
+added to these files.
+
+`openclaw-docs` documents the external OpenClaw product. It does not define any
+Sajtmaskin-local mandate, continuation or action-envelope concepts. Those may
+inform a Sajtagent-owned adapter only after they are restated as Sajtagent
+contracts; they are never imported as an upstream OpenClaw contract.
 
 The committed `.codex/` and `.cursor/agents/` files configure agent roles, not
 account credentials. No API key, bearer token, OAuth token, database URL, or

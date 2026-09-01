@@ -15,6 +15,14 @@ from dataclasses import dataclass
 from pathlib import Path
 
 PLATFORM_ROOT = Path(__file__).resolve().parent.parent
+CONTROL_PANEL_ROOT = Path(__file__).resolve().parent
+if str(CONTROL_PANEL_ROOT) not in sys.path:
+    sys.path.insert(0, str(CONTROL_PANEL_ROOT))
+
+from flow_model import build_dot, load_flow_model, trace_impact, view_edges
+
+PLATFORM_FLOW_PATH = PLATFORM_ROOT / "system-model" / "platform-flow-v1.json"
+CARD_FLOW_PATH = PLATFORM_ROOT / "sajtagent-site" / "system-model" / "card-flow-v1.json"
 
 
 @dataclass(frozen=True)
@@ -236,6 +244,96 @@ def _render_architecture(st: object) -> None:
     )
 
 
+def _render_flow(st: object, heading: str, model_path: Path) -> None:
+    st.header(heading)
+    st.caption(
+        "Välj riktning och en felande nod. Grafen markerar var felet uppstår, "
+        "vilka steg som påverkas och vilket repo som äger diagnosen."
+    )
+    if not model_path.is_file():
+        st.warning(f"Modellen saknas: `{model_path}`")
+        return
+
+    try:
+        model = load_flow_model(model_path)
+    except (OSError, ValueError) as error:
+        st.error(str(error))
+        return
+
+    view_by_label = {view["label"]: view for view in model["views"]}
+    selected_label = st.selectbox(
+        "Vy",
+        list(view_by_label),
+        key=f"flow-view-{model['modelId']}",
+    )
+    view = view_by_label[selected_label]
+    selected_edges = view_edges(model, view["id"])
+    selected_node_ids = {
+        node_id
+        for edge in selected_edges
+        for node_id in (edge["from"], edge["to"])
+    }
+    node_by_id = {node["id"]: node for node in model["nodes"]}
+    failure_options = {"Inget simulerat fel": None}
+    failure_options.update(
+        {
+            f"{node_by_id[node_id]['label']} · {node_by_id[node_id]['failure']['code']}": node_id
+            for node_id in selected_node_ids
+        }
+    )
+    failure_label = st.selectbox(
+        "Simulera fel vid",
+        list(failure_options),
+        key=f"flow-failure-{model['modelId']}",
+    )
+    failed_node_id = failure_options[failure_label]
+
+    st.graphviz_chart(
+        build_dot(model, view["id"], failed_node_id),
+        use_container_width=True,
+    )
+
+    if failed_node_id:
+        failed_node = node_by_id[failed_node_id]
+        failure = failed_node["failure"]
+        impacted = trace_impact(model, view["id"], failed_node_id)
+        st.error(f"{failure['code']}: {failure['symptom']}")
+        st.caption(
+            f"Ägare: {failed_node['owner']} · upptäcks av: {failure['detectedBy']}"
+        )
+        if impacted:
+            st.dataframe(
+                [
+                    {
+                        "Påverkat steg": node_by_id[node_id]["label"],
+                        "Ägare": node_by_id[node_id]["owner"],
+                        "Status": node_by_id[node_id]["status"],
+                    }
+                    for node_id in impacted
+                ],
+                use_container_width=True,
+                hide_index=True,
+            )
+        else:
+            st.info("Inga senare steg i den valda vyn påverkas.")
+
+    with st.expander("Nodernas ansvar och mognad"):
+        st.dataframe(
+            [
+                {
+                    "Steg": node["label"],
+                    "Ägare": node["owner"],
+                    "Status": node["status"],
+                    "Ansvar": node["summary"],
+                }
+                for node in model["nodes"]
+                if node["id"] in selected_node_ids
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
+
+
 def _render_openai_boundary(st: object) -> None:
     st.header("OpenAI-klientens gräns")
     st.info(
@@ -277,7 +375,14 @@ def run_control_panel() -> None:
     st.sidebar.caption("Control panel · read only")
     page = st.sidebar.radio(
         "Vy",
-        ["Översikt", "Repository-status", "Arkitektur", "OpenAI-gräns"],
+        [
+            "Översikt",
+            "Repository-status",
+            "Arkitektur",
+            "Systemflöde",
+            "Kortflöde",
+            "OpenAI-gräns",
+        ],
     )
     st.sidebar.divider()
     st.sidebar.success("READ ONLY")
@@ -289,6 +394,10 @@ def run_control_panel() -> None:
         _render_repositories(st, statuses)
     elif page == "Arkitektur":
         _render_architecture(st)
+    elif page == "Systemflöde":
+        _render_flow(st, "Systemflöde", PLATFORM_FLOW_PATH)
+    elif page == "Kortflöde":
+        _render_flow(st, "Kortflöde", CARD_FLOW_PATH)
     else:
         _render_openai_boundary(st)
 

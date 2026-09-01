@@ -14,6 +14,18 @@ py -m venv control-panel\.venv
 
 The script relaunches itself through Streamlit when run directly.
 
+The **Systemflöde** and **Kortflöde** pages render the machine-readable flow
+models. Select a direction and simulate a failed node to see its owning repo,
+the expected symptom, and every later step affected by that failure.
+
+Validate the canonical platform model without starting Streamlit:
+
+```powershell
+python scripts/validate-system-flow.py
+python scripts/render-system-flow.py --check
+python -m unittest discover -s tests -p "test_*.py"
+```
+
 The future `python-backoffice/` area is intentionally not implemented yet. A
 writable backoffice must use the same authenticated validation and domain APIs
 as the product; it must not make direct production or catalog file edits.

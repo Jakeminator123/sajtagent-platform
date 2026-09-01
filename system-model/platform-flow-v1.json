@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "modelId": "sajtagent-platform-flow-v1",
+  "title": "Sajtagent platformflöde",
+  "description": "Ett körbart bottom-up-kontrakt för kommandon nedåt, bevis uppåt och felpåverkan genom Sajtagent-plattformen.",
+  "owners": [
+    "user",
+    "sajtagent-site",
+    "sajtagent-sprites",
+    "openclaw",
+    "project-workspace"
+  ],
+  "statuses": ["planned", "prototype", "contracted", "implemented", "verified"],
+  "channels": {
+    "intent": "Opålitlig användaravsikt och serverauktoriserade jobb rör sig nedåt.",
+    "execution": "OpenClaw begär endast verktyg som redan tillåtits av jobbpolicyn.",
+    "evidence": "Kvitton och verifierade resultat byggs uppåt från arbetsytan.",
+    "projection": "Canonical state projiceras till produktens kort och preview."
+  },
+  "layers": [
+    { "id": 0, "label": "Arbetsyta och verktyg" },
+    { "id": 1, "label": "OpenClaw runtime" },
+    { "id": 2, "label": "Sajtagent runtime-adapter" },
+    { "id": 3, "label": "Produktcontroller" },
+    { "id": 4, "label": "Resultat och projektioner" },
+    { "id": 5, "label": "Builderkort" },
+    { "id": 6, "label": "Användare" }
+  ],
+  "nodes": [
+    {
+      "id": "foundation.workspace",
+      "label": "Isolerad jobbarbetsyta",
+      "kind": "foundation",
+      "layer": 0,
+      "owner": "project-workspace",
+      "status": "contracted",
+      "summary": "En jobbbunden, hemlighetsfri arbetsyta där kod kan läsas, ändras och verifieras.",
+      "failure": {
+        "code": "workspace.unavailable",
+        "symptom": "Jobbet stoppas innan filverktyg får användas.",
+        "detectedBy": "sajtagent-sprites"
+      }
+    },
+    {
+      "id": "foundation.native-tools",
+      "label": "OpenClaw native tools",
+      "kind": "foundation",
+      "layer": 0,
+      "owner": "openclaw",
+      "status": "contracted",
+      "summary": "Read, write, apply_patch, exec och browser under sandbox och allow/deny-policy.",
+      "failure": {
+        "code": "tool.denied-or-failed",
+        "symptom": "Verktyget nekas eller ger ett kvitto med felstatus.",
+        "detectedBy": "openclaw"
+      }
+    },
+    {
+      "id": "foundation.product-mcp",
+      "label": "Produktspecifika MCP-verktyg",
+      "kind": "foundation",
+      "layer": 0,
+      "owner": "sajtagent-sprites",
+      "status": "planned",
+      "summary": "Endast funktioner som OpenClaw saknar, exempelvis preview- eller versionskvitton.",
+      "failure": {
+        "code": "mcp.unavailable",
+        "symptom": "Ett produktspecifikt verktyg saknas eller fallerar stängt.",
+        "detectedBy": "sajtagent-sprites"
+      }
+    },
+    {
+      "id": "runtime.openclaw",
+      "label": "OpenClaw Gateway och agent-loop",
+      "kind": "runtime",
+      "layer": 1,
+      "owner": "openclaw",
+      "status": "contracted",
+      "summary": "Äger sessionkö, run lifecycle, timeout, sandbox och interna tool/assistant/lifecycle-events.",
+      "failure": {
+        "code": "openclaw.run-failed",
+        "symptom": "Run avslutas med error, timeout eller avbrott.",
+        "detectedBy": "sajtagent-sprites"
+      }
+    },
+    {
+      "id": "runtime.adapter",
+      "label": "Sajtagent adapter och policykompilator",
+      "kind": "runtime",
+      "layer": 2,
+      "owner": "sajtagent-sprites",
+      "status": "contracted",
+      "summary": "Binder auktoriserat jobb till session, workspace, sandbox och verktyg; normaliserar WorkerReportV1.",
+      "failure": {
+        "code": "adapter.policy-rejected",
+        "symptom": "Jobbet kan inte bindas till en striktare runtimepolicy.",
+        "detectedBy": "sajtagent-sprites"
+      }
+    },
+    {
+      "id": "product.controller",
+      "label": "SiteAgent produktcontroller",
+      "kind": "product",
+      "layer": 3,
+      "owner": "sajtagent-site",
+      "status": "contracted",
+      "summary": "Äger auth, tenant/projekt, mandat, idempotens, verifiering och terminalt resultat.",
+      "failure": {
+        "code": "controller.verification-failed",
+        "symptom": "WorkerReport accepteras inte och ingen canonical version skapas.",
+        "detectedBy": "sajtagent-site"
+      }
+    },
+    {
+      "id": "product.version-store",
+      "label": "Version, preview och sitemap",
+      "kind": "projection",
+      "layer": 4,
+      "owner": "sajtagent-site",
+      "status": "prototype",
+      "summary": "Persistens för verifierade revisions-, preview- och sitemapreferenser.",
+      "failure": {
+        "code": "projection.persistence-failed",
+        "symptom": "Bygget kan inte publiceras som en användarversion.",
+        "detectedBy": "sajtagent-site"
+      }
+    },
+    {
+      "id": "product.event-stream",
+      "label": "Sekvensordnad BuildEventV1",
+      "kind": "projection",
+      "layer": 4,
+      "owner": "sajtagent-site",
+      "status": "contracted",
+      "summary": "Replaybar produktström; råa OpenClaw-events exponeras aldrig för browsern.",
+      "failure": {
+        "code": "events.sequence-gap",
+        "symptom": "Klienten upptäcker ett sequence-gap och måste återhämta canonical state.",
+        "detectedBy": "sajtagent-site"
+      }
+    },
+    {
+      "id": "ui.builder-cards",
+      "label": "Builderns kort och preview",
+      "kind": "ui",
+      "layer": 5,
+      "owner": "sajtagent-site",
+      "status": "prototype",
+      "summary": "Sajtagent, Byggval och Blocks skapar avsikter; Versioner och Karta visar verifierade projektioner.",
+      "failure": {
+        "code": "ui.projection-stale",
+        "symptom": "Kortet visar väntläge eller fel, inte en påhittad lyckad version.",
+        "detectedBy": "sajtagent-site"
+      }
+    },
+    {
+      "id": "user.intent",
+      "label": "Användarens mål och uppföljningar",
+      "kind": "actor",
+      "layer": 6,
+      "owner": "user",
+      "status": "implemented",
+      "summary": "En initierande begäran följd av ändringsavsikter mot en verifierad basrevision.",
+      "failure": {
+        "code": "intent.invalid",
+        "symptom": "Avsikten valideras men skapar inget jobb.",
+        "detectedBy": "sajtagent-site"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "intent.user-to-cards", "from": "user.intent", "to": "ui.builder-cards", "channel": "intent", "contract": "UI interaction" },
+    { "id": "intent.cards-to-controller", "from": "ui.builder-cards", "to": "product.controller", "channel": "intent", "contract": "BuilderIntentV1" },
+    { "id": "intent.controller-to-adapter", "from": "product.controller", "to": "runtime.adapter", "channel": "intent", "contract": "BuildJobV1" },
+    { "id": "intent.adapter-to-openclaw", "from": "runtime.adapter", "to": "runtime.openclaw", "channel": "intent", "contract": "OpenClawRunRequest (internal)" },
+    { "id": "execution.openclaw-to-workspace", "from": "runtime.openclaw", "to": "foundation.workspace", "channel": "execution", "contract": "sandboxed workspace access" },
+    { "id": "execution.openclaw-to-native-tools", "from": "runtime.openclaw", "to": "foundation.native-tools", "channel": "execution", "contract": "native tool policy" },
+    { "id": "execution.openclaw-to-product-mcp", "from": "runtime.openclaw", "to": "foundation.product-mcp", "channel": "execution", "contract": "MCP tool policy" },
+    { "id": "evidence.workspace-to-openclaw", "from": "foundation.workspace", "to": "runtime.openclaw", "channel": "evidence", "contract": "workspace receipts" },
+    { "id": "evidence.native-tools-to-openclaw", "from": "foundation.native-tools", "to": "runtime.openclaw", "channel": "evidence", "contract": "tool results" },
+    { "id": "evidence.product-mcp-to-openclaw", "from": "foundation.product-mcp", "to": "runtime.openclaw", "channel": "evidence", "contract": "product tool receipts" },
+    { "id": "evidence.openclaw-to-adapter", "from": "runtime.openclaw", "to": "runtime.adapter", "channel": "evidence", "contract": "internal lifecycle/tool stream" },
+    { "id": "evidence.adapter-to-controller", "from": "runtime.adapter", "to": "product.controller", "channel": "evidence", "contract": "WorkerReportV1" },
+    { "id": "projection.controller-to-version", "from": "product.controller", "to": "product.version-store", "channel": "projection", "contract": "BuildResultV1" },
+    { "id": "projection.controller-to-events", "from": "product.controller", "to": "product.event-stream", "channel": "projection", "contract": "BuildEventV1" },
+    { "id": "projection.version-to-events", "from": "product.version-store", "to": "product.event-stream", "channel": "projection", "contract": "canonical refs" },
+    { "id": "projection.events-to-cards", "from": "product.event-stream", "to": "ui.builder-cards", "channel": "projection", "contract": "sequenced SSE" },
+    { "id": "projection.cards-to-user", "from": "ui.builder-cards", "to": "user.intent", "channel": "projection", "contract": "verified UI state" }
+  ],
+  "views": [
+    {
+      "id": "command-down",
+      "label": "Kommando nedåt",
+      "orientation": "TB",
+      "edgeIds": [
+        "intent.user-to-cards",
+        "intent.cards-to-controller",
+        "intent.controller-to-adapter",
+        "intent.adapter-to-openclaw",
+        "execution.openclaw-to-workspace",
+        "execution.openclaw-to-native-tools",
+        "execution.openclaw-to-product-mcp"
+      ]
+    },
+    {
+      "id": "evidence-up",
+      "label": "Bevis nedifrån och upp",
+      "orientation": "BT",
+      "edgeIds": [
+        "evidence.workspace-to-openclaw",
+        "evidence.native-tools-to-openclaw",
+        "evidence.product-mcp-to-openclaw",
+        "evidence.openclaw-to-adapter",
+        "evidence.adapter-to-controller",
+        "projection.controller-to-version",
+        "projection.controller-to-events",
+        "projection.version-to-events",
+        "projection.events-to-cards",
+        "projection.cards-to-user"
+      ]
+    }
+  ]
+}
