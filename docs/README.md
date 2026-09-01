@@ -13,6 +13,8 @@ the repository that owns a feature remain the strongest source of truth.
   runtime ownership, authority, tools, and the first bounded agent loop.
 - [MCP and integration baseline](mcp-and-integrations.md) — verified developer
   tools, configuration placement, connection scope, and secret boundaries.
+- [Executable system flow](system-flow.md) — generated bottom-up evidence and
+  top-down command paths, ownership, and failure propagation.
 - [Sprites and OpenClaw proving runbook](sprites-runbook.md) — the first safe
   provider experiment and the unresolved controller-host decision.
 
