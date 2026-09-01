@@ -7,11 +7,18 @@ alwaysApply: true
 
 - Before writing, identify the exact Git root, file scope, active agents and
   uncommitted overlap. One repository has at most one active writer.
-- Prefer the available direct agent or task channel. Send four short fields:
-  task, files/area, what and why, and the next potentially conflicting action.
-- `/kom <agent-or-task> <message>` invokes the project skill `kom` and means:
-  contact that existing agent now, then report whether the message was sent.
-- Do not create a new agent merely to satisfy `/kom`. Ask Jakob if no intended
+- Prefer direct messaging between existing Codex tasks. Name the repository,
+  branch/worktree, current state, files or area, requested action, and the next
+  potentially conflicting action.
+- `/kom <agent-or-task> <message>` is human-facing shorthand for that direct
+  task contact. Use the project skill when it is loaded; otherwise use the
+  available task channel, such as `send_message_to_thread`. It is not a shell
+  command, product protocol, or reason to create a duplicate agent.
+- The receiver acknowledges scope or a write lock and reports commit/checks or
+  a blocker. Follow progress through task status/waiting rather than starting
+  the same work elsewhere.
+- Messages do not authorize secrets access, cross-repository mutation, push,
+  merge, deployment, or external-resource changes. Ask Jakob if no intended
   recipient can be identified safely.
 - If direct messaging is unavailable, write a secret-free temporary note under
   `.agents/coordination/<agent-id>.md` and tell the user that delivery is not
