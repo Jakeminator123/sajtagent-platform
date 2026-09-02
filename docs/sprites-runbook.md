@@ -25,9 +25,11 @@ receive Sprites OAuth authority or an organization token.
 
 ## Product edit and live-preview loop
 
-Assign one persistent project Sprite to an active project by default. Each user
-prompt becomes a new `BuildJob` against the current `WorkspaceRevision`; it does
-not require a new Sprite or a Vercel deployment.
+Assign one persistent project Sprite to an active project by default. Sajtagent
+may create a `BuildJob` against the current `WorkspaceRevision` when it chooses
+the build Skill within the active standing mandate. A normal conversational
+prompt creates no BuildJob. An in-scope build needs neither a second user
+confirmation, a new Sprite, nor a Vercel deployment.
 
 The OpenClaw product agent should be autonomous inside that assigned workspace:
 it may inspect and edit project files, install allowed dependencies, run bounded
@@ -53,11 +55,12 @@ switch the whole Sprite to public merely to make embedding easy. The preview
 gateway must authorize user plus project and support the HTTP/WebSocket behavior
 required by the selected development server.
 
-On completion, return a typed `BuildResult` containing at least the new
+On build completion, return a typed `BuildResult` containing at least the new
 `WorkspaceRevision`, preview-session reference, checks, changed-file summary,
-terminal status, and receipts. A follow-up prompt starts another bounded job on
-the same current revision and workspace; it must not rely on hidden model memory
-as the source of truth.
+terminal status, and receipts. A follow-up mutation may start another bounded
+job on the same current revision and workspace; an ordinary reply remains in
+the conversation. Neither path may rely on hidden model memory as the source of
+truth.
 
 ## Git and publication boundary
 
