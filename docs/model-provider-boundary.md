@@ -105,8 +105,9 @@ execution can be added only where independence and retry safety are proven.
    adapters; no provider-specific logic spread across UI routes.
 2. Provider and model selected through server configuration rather than
    hard-coded prompts.
-3. A small read tool set, followed by one bounded `apply patch -> check ->
-   preview` path.
+3. A small independently selectable tool set for scoped reads, code changes,
+   checks, preview, and visual evidence. The agent invokes only the subset
+   required by the current site task and may finish without mutation.
 4. Explicit maximums for tool calls, model turns, wall time, changed bytes,
    repair attempts, and cost.
 5. User-visible progress and tool receipts, but never private chain-of-thought.

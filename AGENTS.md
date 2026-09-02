@@ -2,8 +2,10 @@
 
 ## Mission
 
-- Build an independent, conversation-first Sajtagent that feels smart, living,
-  visually aware, code-capable, and easy to collaborate with.
+- Build an independent, dynamic site-creating Sajtagent that intelligently
+  selects Skills, capabilities, and tools to produce precise, verified sites.
+  It is visually aware, code-capable, and feels smart and living; conversation
+  is its natural control interface rather than its product identity.
 - Reuse proven Sajtmaskin parts when that reduces code and risk, but do not
   inherit its product personality, card-and-process experience, complexity, or
   contracts by default.

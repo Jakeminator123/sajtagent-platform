@@ -1,12 +1,20 @@
-# Sajtagent product-agent doctrine
+# Sajtagent site-creating agent doctrine
 
 Status: accepted direction, 2026-09-02.
 
 ## Decision
 
-Sajtagent is first and foremost a continuous, intelligent conversation with a
-capable agent. Building a website is one of the agent's skills; it is not the
-agent's only mode and it must not replace the conversation.
+Sajtagent is first and foremost a dynamic, intelligent **site-creating agent**.
+Its purpose is to turn a user's intent into a precise, working, reviewed and
+improvable website. Conversation is its natural control interface, not its
+product identity or primary output.
+
+Sajtagent understands the current site and goal, reasons about what is needed,
+and dynamically selects the smallest useful combination of Skills,
+capabilities, and tools. It may discuss, propose, inspect, edit, build, test,
+visually review, publish when authorized, and adapt its next action from real
+evidence. Site creation is the mission; conversation, memory, code access,
+visual perception, and tool use are coordinated means to achieve it.
 
 Within the authenticated user's active project and standing mandate, Sajtagent
 has broad authority to inspect, reason, edit, build, test, visually review, and
@@ -14,9 +22,10 @@ iterate without asking for a redundant confirmation before each operation. A
 direct instruction or an ongoing user goal is authorization for the ordinary,
 recoverable work required to complete it.
 
-The product must feel like a smart, present collaborator that happens to have
-powerful website-building skills. It must not feel like a process dashboard, a
-card-based control room, or a thinner copy of Sajtmaskin.
+The product must feel like a smart and living site creator, not a generic
+conversation partner that happens to have website-building tools. It must not
+feel like a fixed process dashboard, a card-based control room, or a thinner
+copy of Sajtmaskin.
 
 This document defines product direction. It does not claim that the current
 Site or Runtime already implements every requirement below.
@@ -25,12 +34,15 @@ Site or Runtime already implements every requirement below.
 
 The intended hierarchy is:
 
-1. **Sajtagent is the agent.** It converses, remembers, observes, reasons, and
-   maintains continuity with the user.
-2. **A Skill is versioned agent guidance for performing a kind of work.**
-   Loading a Skill grants no credential or authority by itself. Product
-   language calls Build a Skill; `build.request` is one technical capability
-   that may let the agent exercise it.
+1. **Sajtagent is the site-creating agent.** It turns goals into verified site
+   revisions and maintains continuity across observation, reasoning, tool use,
+   conversation, and memory.
+2. **A Skill is a versioned agent ability and its guidance for a kind of
+   work.** Build is the Skill for bounded site mutation, while creating a good
+   site may coordinate Build with visual review, code inspection, content, and
+   other Skills. `build.request` is the typed runtime tool entry point through
+   which the Build Skill requests an execution. Loading a Skill grants no
+   credential or authority by itself.
 3. **A capability is a server-enforced class of operation.** Examples include
    project read, workspace edit, checks, private preview, and publication.
 4. **A mandate defines the work the user has delegated.** It may be one direct
@@ -42,7 +54,30 @@ The intended hierarchy is:
    BuildJob is an execution derived from an active mandate, not a new request
    for user authority.
 7. **A tool call performs one concrete operation.** It is subordinate to the
-   conversation and remains visible as evidence, not as the agent's identity.
+   site-creation goal and remains visible as evidence, not as the agent's
+   identity.
+
+## Dynamic capability and tool selection
+
+Sajtagent must not map every prompt onto one fixed workflow or invoke every
+available tool. Its intelligent loop is:
+
+```text
+understand intent and current site
+  -> inspect only the context needed
+  -> reason about alternatives and missing information
+  -> select permitted Skills and capabilities
+  -> call the smallest precise set of tools
+  -> observe code, checks, preview and visual evidence
+  -> adapt, repair, ask a material counterquestion, or finish
+```
+
+Capabilities describe what the runtime permits. Skills guide how the agent can
+combine capabilities for a class of work. Tools perform exact operations. The
+agent chooses among them from current context and feedback; neither the UI nor a
+hard-coded build pipeline should preselect the whole sequence. Precision comes
+from grounded selection, typed inputs, revision-bound evidence, and verification
+after action rather than from presenting more controls to the user.
 
 A Skill may tell the model when and how to use `build.request`. The Skill is not
 itself the security boundary. Site and Runtime enforce the effective grant,
@@ -101,21 +136,22 @@ another tenant, a new paid service, irreversible data loss, or a production
 publication that the user has not delegated. If the user's instruction already
 authorizes that exact action, Sajtagent does not ask again.
 
-## Conversation is the primary interface
+## Conversation is the control interface
 
-Every user turn enters one continuous conversation. Sajtagent can answer,
-reason, ask a counterquestion, use one or more Skills, or combine these in the
-same turn.
+Every user turn enters one continuous control conversation with the same
+site-creating agent. Sajtagent can answer, reason, ask a counterquestion, use one
+or more Skills, or combine these in the same turn without changing identity.
 
 The expected interaction is:
 
 ```text
-user message
+user direction
   -> immediate visible acknowledgement
+  -> intent and site context understood
   -> streamed assistant language and real activity
-  -> optional skill calls inside the same conversation
+  -> dynamically selected Skills, capabilities and tools when useful
   -> visual/code verification and autonomous repair when needed
-  -> a spoken summary grounded in the result
+  -> a grounded site result or precise answer
 ```
 
 Tool use must not silence the agent for the duration of a long operation. It
@@ -130,9 +166,9 @@ definition of done.
 
 ## A smart and living presence
 
-The primary Builder composition should be the live site and the conversation,
-not a deck of operational cards. Technical controls and receipts may exist but
-remain secondary and collapsible.
+The primary Builder composition should be the live site and its direct control
+conversation with Sajtagent, not a deck of operational cards. Technical
+controls and receipts may exist but remain secondary and collapsible.
 
 Sajtagent should visibly move through truthful, human-readable states:
 
@@ -164,24 +200,28 @@ exposing raw orchestration events.
 
 ## What Sajtagent should be able to do
 
-### Converse and reason
+### Reason about site work
 
-- answer ordinary questions without starting a BuildJob;
-- discuss alternatives and explain trade-offs at the user's level;
+- answer questions about the site, project, design, code, and proposed work
+  without starting a BuildJob when no mutation is needed;
+- discuss site alternatives and explain trade-offs at the user's level;
 - understand references to the visible page and recent conversation;
 - ask useful counterquestions rather than blindly executing ambiguity;
 - state assumptions without burdening the user with routine implementation
   choices;
-- keep one coherent personality and history across conversation and tool use.
+- keep one coherent site-creating identity and grounded project history across
+  conversation and tool use.
 
 ### Remember the user and project
 
 Sajtagent should maintain separate, user-visible sources of continuity:
 
-- **Editable memory:** user identity and stable preferences; brand, tone,
-  accessibility and design preferences; project facts, decisions, terminology
-  and constraints. These entries carry source, capture time, and
-  fact-versus-inference status and can be corrected or forgotten.
+- **Editable memory:** the user's stated name and site-relevant working or
+  design preferences; brand, tone, accessibility and design preferences;
+  project facts, decisions, terminology and constraints. These entries carry
+  source, capture time, and fact-versus-inference status and can be corrected or
+  forgotten. They never determine the authenticated identity that authorizes a
+  tool.
 - **Commitment state:** what Sajtagent has promised and what remains open. It is
   derived from conversation events and can close only through an explicit
   answer, cancellation, or verified execution outcome.
@@ -250,7 +290,8 @@ make authorized changes, and verify the external result without asking the
 user to reconfirm every subordinate API call.
 
 Specialist workers or models may exist behind the scenes when they improve
-quality or speed, but Sajtagent remains one coherent user-facing collaborator.
+quality or speed, but Sajtagent remains one coherent user-facing site-creating
+agent.
 Delegation must preserve the same project scope, memory, authority, audit trail,
 and final accountability. Internal coordination must not become a second
 process console the user has to operate.
@@ -401,6 +442,22 @@ offers the change without silently creating an unrelated goal.
 The doctrine is not implemented until production-like tests prove all of the
 following behaviors.
 
+### Dynamic selection and precise site outcomes
+
+- A scenario matrix varies both the user's instruction and the actual site
+  state. It asserts scenario-specific required and forbidden Skills,
+  capabilities, and tool classes; a binary answer/build router cannot pass.
+- A critique that needs only rendered evidence may use visual read tools and
+  answer without mutation. A scoped visual change may combine preview, code
+  read, edit, check, and before/after review, while leaving unrelated tools such
+  as dependency installation and publication unused.
+- Tool selection is recorded with the observed evidence and exact revision.
+  Removing or denying one tool produces an appropriate fallback,
+  counterquestion, or bounded failure rather than a fabricated result.
+- Mutation tests assert the requested observable site outcome at declared
+  desktop and mobile viewports, plus relevant code/check evidence. Merely
+  creating a BuildJob or receiving a success receipt is insufficient.
+
 ### Conversation and streaming
 
 - "Do not build; explain what you see" produces `turn.accepted`, one or more
@@ -440,7 +497,7 @@ following behaviors.
 - A mutating result presents a concise changed-file or diff summary plus checks
   and rendered evidence, not a raw process log.
 
-### Memory and identity
+### Memory and continuity
 
 - Reloading a conversation preserves editable user and project memory with its
   source, capture time and fact-versus-inference status.
@@ -499,18 +556,21 @@ As observed on 2026-09-02, the deployed Builder does not yet conform to this
 doctrine. Site grants the build path to every turn, Runtime consequently forces
 a build-only tool response, and Site buffers events before presenting them.
 The result proves the build pipeline but does not provide the intended direct,
-streamed conversation.
+dynamic site-creation control loop.
 
 The first corrective vertical slice is:
 
 1. preserve broad standing project authority;
-2. let an ordinary turn answer and stream without a BuildJob;
-3. let a clear build instruction invoke the build Skill without a second
+2. let a site question or design/code reasoning turn answer and stream without
+   a BuildJob;
+3. let the agent dynamically choose the smallest permitted Skill and tool set
+   from the instruction, site state, and observed evidence;
+4. let a clear build instruction invoke the Build Skill without a second
    confirmation;
-4. show real conversation, Skill progress, preview evidence, and the final
-   explanation in one continuous thread;
-5. lock both paths with production-like regressions and measured live smoke
-   tests.
+5. show direct control conversation, Skill progress, preview evidence, and the
+   final site result in one continuous thread;
+6. lock the paths and precise site outcomes with production-like regressions
+   and measured live smoke tests.
 
 ## Relationship to Sajtmaskin
 

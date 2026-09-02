@@ -7,9 +7,10 @@ the repository that owns a feature remain the strongest source of truth.
 ## Accepted direction
 
 - [Architecture](ARCHITECTURE.md) — product, runtime, and repository boundaries.
-- [Product-agent doctrine](product-agent-doctrine.md) — conversation-first
-  identity, standing authority, Skills, memory, visual review, autonomy, and
-  the intended living agent experience.
+- [Site-creating agent doctrine](product-agent-doctrine.md) — site-creating
+  identity, dynamic capability and tool selection, standing authority,
+  conversation, memory, visual review, autonomy, and the intended living agent
+  experience.
 - [Migration from Sajtmaskin](migration-from-sajtmaskin.md) — what to reuse now,
   what must be proven, and what is deliberately deferred.
 - [Model-provider boundary](model-provider-boundary.md) — OpenAI/Anthropic

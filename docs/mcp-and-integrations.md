@@ -43,7 +43,7 @@ project secret may be committed there.
 
 This policy governs the developer/operator MCP connection. It is separate from
 the product agent's server-enforced standing project mandate described in
-[the product-agent doctrine](product-agent-doctrine.md).
+[the site-creating agent doctrine](product-agent-doctrine.md).
 
 Use the official endpoint `https://sprites.dev/mcp`. During OAuth:
 

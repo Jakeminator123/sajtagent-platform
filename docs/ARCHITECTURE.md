@@ -7,6 +7,12 @@ Status: initial platform decision, 2026-08-26.
 **SiteAgent is the entire web product.** The Builder is one workspace inside
 SiteAgent and must not be used as another name for the product.
 
+**Sajtagent is the site-creating agent inside SiteAgent.** SiteAgent supplies
+the product shell, authentication, project control plane, and Builder surface;
+Sajtagent understands the site goal and dynamically selects permitted Skills,
+capabilities, and tools. The product and the agent are related but not
+interchangeable identities.
+
 | Route | Meaning |
 | --- | --- |
 | `/` | SiteAgent's public first page |
@@ -19,9 +25,12 @@ these meanings consistently. Product-owned API routes may continue to use
 
 ## Product-agent experience and mandate
 
-Sajtagent is a conversation-first, visually aware and code-capable product
-agent. Building is one Skill among several; it must not turn every user message
-into a BuildJob or replace assistant language with an operational status card.
+Sajtagent is a dynamic, visually aware and code-capable site-creating agent.
+Conversation is its control interface. The agent intelligently selects Skills,
+capabilities, and tools according to the user's intent, current site, runtime
+grant, and observed evidence instead of following one fixed build pipeline. It
+must not turn every user message into a BuildJob or replace useful language with
+an operational status card.
 
 The authenticated user may give Sajtagent a broad standing mandate for the
 active project. Within that mandate the agent can inspect, edit, build, test,
@@ -29,9 +38,10 @@ review and repair recoverable work without asking for a redundant confirmation
 before every operation. Deterministic Site and Runtime boundaries still bind
 tools to the tenant, user, project, revision, integrations and hard limits.
 
-The full accepted direction for conversation, memory, visual review, Skills,
-autonomy, speed and the non-Sajtmaskin-like experience is defined in
-[Sajtagent product-agent doctrine](product-agent-doctrine.md).
+The full accepted direction for site creation, dynamic capability selection,
+conversation, memory, visual review, autonomy, speed, and the
+non-Sajtmaskin-like experience is defined in
+[Sajtagent site-creating agent doctrine](product-agent-doctrine.md).
 
 ## Product boundary
 
