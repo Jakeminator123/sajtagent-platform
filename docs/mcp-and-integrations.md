@@ -41,6 +41,10 @@ project secret may be committed there.
 
 ## Sprite connector policy
 
+This policy governs the developer/operator MCP connection. It is separate from
+the product agent's server-enforced standing project mandate described in
+[the site-creating agent doctrine](product-agent-doctrine.md).
+
 Use the official endpoint `https://sprites.dev/mcp`. During OAuth:
 
 1. choose a restricted token;

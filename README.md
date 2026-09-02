@@ -1,8 +1,12 @@
 # Sajtagent Platform
 
-Sajtagent Platform is the shared workspace around a thinner, clearer version 2
-of the ideas that work well in Sajtmaskin. The goal is to reuse proven behavior
-without copying the old product's internal structure or heavy LLM pipeline.
+Sajtagent Platform is the shared workspace for an independent, dynamic
+site-creating agent. It understands the user's intent and the current site,
+then intelligently selects Skills, capabilities, and tools to create, inspect,
+verify, and improve websites precisely. Conversation is its natural control
+interface, not its product identity. It selectively reuses proven technical
+behavior without copying Sajtmaskin's product personality, card-and-process
+experience, internal structure, or heavy LLM pipeline.
 
 ## Repository boundaries
 
@@ -21,6 +25,7 @@ each repository separately into the folder shown above.
 ## Start here
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Site-creating agent doctrine](docs/product-agent-doctrine.md)
 - [Migration decisions](docs/migration-from-sajtmaskin.md)
 - [Change and PR workflow](docs/workflow/README.md)
 - [Model-provider boundary](docs/model-provider-boundary.md)

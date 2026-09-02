@@ -34,6 +34,11 @@ two independent writers plus one reviewer while the primary agent coordinates.
 
 ## Before starting `/goal`
 
+This section governs development agents and operator infrastructure changes.
+Its separate permissions do not introduce per-build confirmation inside an
+active Sajtagent product mandate; that product authority is defined in
+[the site-creating agent doctrine](product-agent-doctrine.md).
+
 1. Complete restricted Sprites OAuth. In an interactive Codex CLI session, use
    `/mcp verbose`; from plain PowerShell, use `codex mcp list`. The connection
    was already verified on Jakob's current machine on 2026-08-27.

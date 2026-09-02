@@ -7,6 +7,12 @@ Status: initial platform decision, 2026-08-26.
 **SiteAgent is the entire web product.** The Builder is one workspace inside
 SiteAgent and must not be used as another name for the product.
 
+**Sajtagent is the site-creating agent inside SiteAgent.** SiteAgent supplies
+the product shell, authentication, project control plane, and Builder surface;
+Sajtagent understands the site goal and dynamically selects permitted Skills,
+capabilities, and tools. The product and the agent are related but not
+interchangeable identities.
+
 | Route | Meaning |
 | --- | --- |
 | `/` | SiteAgent's public first page |
@@ -17,19 +23,47 @@ Navigation, internal links, metadata, and product documentation should use
 these meanings consistently. Product-owned API routes may continue to use
 `/api/siteagent/...`; the clarification concerns the UI route.
 
+## Product-agent experience and mandate
+
+Sajtagent is a dynamic, visually aware and code-capable site-creating agent.
+Conversation is its control interface. The agent intelligently selects Skills,
+capabilities, and tools according to the user's intent, current site, runtime
+grant, and observed evidence instead of following one fixed build pipeline. It
+must not turn every user message into a BuildJob or replace useful language with
+an operational status card.
+
+The authenticated user may give Sajtagent a broad standing mandate for the
+active project. Within that mandate the agent can inspect, edit, build, test,
+review and repair recoverable work without asking for a redundant confirmation
+before every operation. Deterministic Site and Runtime boundaries still bind
+tools to the tenant, user, project, revision, integrations and hard limits.
+
+The full accepted direction for site creation, dynamic capability selection,
+conversation, memory, visual review, autonomy, speed, and the
+non-Sajtmaskin-like experience is defined in
+[Sajtagent site-creating agent doctrine](product-agent-doctrine.md).
+
 ## Product boundary
 
 ```text
-User
-  |
-  v
-SiteAgent / Builder on Vercel <--------------------> Supabase
-  |
-  | signed, scoped BuildJob
-  v
-Controller / OpenClaw -------- scoped tools ------> project Sprite
-  ^                                                edit / test / preview
-  +--------------- receipts + BuildResult ---------------+
+User <===== streamed conversation =====> SiteAgent / Builder on Vercel
+                                              ^             |
+                                              |             +----> Supabase
+                                              |
+                                  ordered AgentEvents
+                                              |
+                                              v
+                                    Controller / OpenClaw
+                                              |
+                              permitted Skills and scoped tools
+                                              |
+                                              v
+                                        project Sprite
+                                    edit / test / preview
+
+SiteAgent sends a signed ConversationTurn and, when chosen inside the active
+mandate, an optional scoped execution. Runtime returns assistant deltas,
+SkillEvents, receipts, and any verified BuildResult through the ordered stream.
 
 Builder iframe <- authenticated preview route <- Sprite preview service
 
@@ -53,8 +87,9 @@ runtime state.
 The first useful system should be one complete, bounded path:
 
 ```text
-user request -> BuildJob -> one agent loop -> tools -> checks -> preview
-             -> typed BuildResult and verification evidence
+user message -> streamed conversation -> optional Skill selection
+                                      -> bounded BuildJob -> tools -> checks
+                                      -> preview -> verified BuildResult
 ```
 
 Begin with a small tool surface and bounded retries. Add extra agents, models,
@@ -63,21 +98,30 @@ requirement and a measured benefit exist.
 
 ## Interactive edit and preview loop
 
-The normal Builder loop does not deploy to Vercel after every prompt:
+The normal Builder loop does not deploy to Vercel after every mutation:
 
-1. SiteAgent stores the user message and creates a `BuildJob` bound to the
-   current `WorkspaceRevision`.
-2. The controller gives one OpenClaw agent enough project context and scoped
-   tools to work independently inside the assigned project Sprite.
-3. The agent edits the persistent workspace, runs checks, and updates a preview
-   service in that Sprite.
+1. SiteAgent stores every user message and streams a conversational turn. A
+   permitted build Skill creates a `BuildJob` only when useful for the current
+   instruction or standing goal. It does not require a second confirmation.
+2. Each mutating execution is bound to an exact base `WorkspaceRevision`. The
+   controller hydrates an isolated candidate from that revision and gives one
+   OpenClaw agent enough project context and scoped tools to work independently
+   inside the assigned project Sprite.
+3. The agent edits only the candidate, runs checks, and updates a candidate
+   preview service in that Sprite. The accepted workspace and preview pointer do
+   not move while the candidate is unverified.
 4. SiteAgent authorizes an authenticated preview session and embeds its URL in
    the Builder iframe. It must not expose a raw organization token or make the
    whole Sprite public.
 5. After health and acceptance checks, the controller returns a new
-   `WorkspaceRevision`, `BuildResult`, preview URL, and tool receipts.
-6. A follow-up prompt creates a new bounded job against that revision and edits
-   the same project workspace, producing the next user-visible version.
+   `WorkspaceRevision`, `BuildResult`, preview URL, and tool receipts. Accepting
+   the result atomically advances the canonical revision pointer. A failed,
+   cancelled, or stale candidate is discarded or quarantined and never changes
+   that pointer.
+6. A follow-up mutation may create a new bounded job against the latest accepted
+   revision, producing the next user-visible version. It never inherits an
+   unaccepted candidate implicitly. An ordinary conversational follow-up
+   creates no project version.
 
 The preview route should remain stable for the active project while its content
 changes. Support proxied WebSockets for hot reload where practical; otherwise
@@ -91,9 +135,14 @@ workspace, paths, commands, network access, budgets, expiry, and stale writes.
 
 ## Workspace versions, GitHub, and Vercel
 
-- The Sprite filesystem is the live workspace during an edit loop.
-- Each successful agent turn creates a product version and a Git commit; risky
-  operations may additionally use a Sprite checkpoint for rollback.
+- The Sprite filesystem may host the accepted workspace and isolated candidate
+  workspaces during an edit loop. Only the canonical pointer identifies the
+  accepted version; filesystem recency is never authority.
+- Each successful mutating execution creates a product version and a Git
+  commit and atomically advances that pointer; risky operations may additionally
+  use a Sprite checkpoint for rollback. Failed, cancelled, and stale candidates
+  cannot affect the next job's base. Conversation-only turns do not create
+  project versions.
 - A private GitHub repository is the preferred default durable remote when a
   scoped SiteAgent GitHub App installation is available. Push verified version
   commits, not every intermediate tool edit. Do not require an end user to have

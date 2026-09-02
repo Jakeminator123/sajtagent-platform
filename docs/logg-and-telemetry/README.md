@@ -19,9 +19,24 @@ ID without exposing raw secrets or private model content.
 ## Minimal event envelope
 
 Every cross-system event should eventually carry a timestamp, event name,
-environment, trace ID, project/job IDs where applicable, actor type, component,
-outcome, duration, and schema version. Provider request IDs and model usage may
-be attached when available.
+environment, trace ID, conversation/turn/message IDs where applicable,
+project/Skill/execution/job IDs where applicable, a monotonic event sequence,
+actor type, component, outcome, duration, and schema version. Provider request
+IDs and model usage may be attached when available.
+
+Every mutating `BuildJob`, `ToolGrant`, tool call, and corresponding
+`ToolReceipt` must additionally carry the authorization proof used for that
+operation: mandate ID and version, trigger reference, exact base revision, and
+grant ID plus digest. Runtime rejects a missing field, mismatch, expiry, or
+revoked mandate on the job, grant, or tool call before the tool acts. It
+validates the receipt when ingested and rejects or quarantines a mismatch.
+Receipts preserve the validated values so an audit can prove why the operation
+was allowed without logging credentials.
+
+User-perceived latency also needs browser-received and browser-painted times.
+Voice adds audio-start, transcript-delta, playback-start, interruption, and
+playback-complete times. Client clocks are not authoritative server time, but
+they are required to explain what the interaction actually felt like.
 
 Never log API keys, authorization headers, raw environment variables, customer
 secrets, private chain-of-thought, or unrestricted source archives. Redaction

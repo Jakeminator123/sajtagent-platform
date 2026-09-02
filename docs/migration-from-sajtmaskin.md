@@ -12,10 +12,13 @@ name.
 
 - Preserve behavior with golden examples before moving an implementation.
 - Keep privileged execution separate from both the browser and production.
-- Bind work to a project, job, base revision, budget, and cancellation signal.
+- Bind every conversation to server-owned identity and project context. Bind
+  tool or mutating executions additionally to a job, base revision, budget,
+  and cancellation signal.
 - Let deterministic code authorize tools and verify results.
-- Use a small, typed `BuildJob` and `BuildResult` boundary between the site and
-  Sprite runtime.
+- Use a small typed `ConversationTurn`/`AgentEvent` stream as the primary
+  boundary between Site and Sprite Runtime. Carry `BuildJob` and `BuildResult`
+  only for optional build executions inside that conversation.
 - Retrieve only the files and reference cards needed for the current task.
 - Require real build and preview evidence before reporting success.
 - Keep a replacement and its old path from becoming two permanent systems.
@@ -58,15 +61,22 @@ These may become good designs later. Deferring them is not rejecting their
 principles; it prevents speculative structure from becoming legacy before the
 core workflow exists.
 
+"Self-triggered repair" here means background maintenance without a visible,
+active user goal. Autonomous inspection, repair and verification inside a
+currently delegated goal or BuildJob are part of the normal Sajtagent loop and
+are not deferred.
+
 ## First vertical slice
 
 ```text
-one user request
-  -> SiteAgent validates one BuildJob
+one continuous conversation
+  -> SiteAgent validates and streams one ConversationTurn
+  -> answer-only response or permitted Skill selection
+  -> optional BuildJob derived from the active project mandate
   -> Sajtagent Sprites runs one bounded agent loop
   -> project-scoped read/edit/check/preview tools
   -> deterministic verification
-  -> typed BuildResult with evidence
+  -> assistant explanation plus typed BuildResult with evidence
 ```
 
 Start with one supported site kind and one known-good starter. Release remains

@@ -2,10 +2,17 @@
 
 ## Mission
 
-- Build version 2 of the ideas proven in Sajtmaskin: thinner, clearer, more modern, more compatible, and easier to change.
-- Reuse proven Sajtmaskin parts when that reduces code and risk, but do not inherit complexity or contracts by default.
+- Build an independent, dynamic site-creating Sajtagent that intelligently
+  selects Skills, capabilities, and tools to produce precise, verified sites.
+  It is visually aware, code-capable, and feels smart and living; conversation
+  is its natural control interface rather than its product identity.
+- Reuse proven Sajtmaskin parts when that reduces code and risk, but do not
+  inherit its product personality, card-and-process experience, complexity, or
+  contracts by default.
 - Prefer a small vertical improvement over a broad rewrite or speculative framework.
 - SiteAgent is the whole web product; the Builder is one area, not a synonym.
+- Read `docs/product-agent-doctrine.md` before changing product-agent authority,
+  conversation, memory, visual review, autonomous Skills, or Builder presence.
 
 ## Sources of truth
 
@@ -43,7 +50,9 @@ repository's executable contract.
 - The Streamlit control panel and Site frontend must not own privileged OpenAI
   or Anthropic clients. Product provider credentials belong server-side in the
   runtime and are never used by Codex/Cursor development subagents.
-- Tool grants are server-owned, project/job-scoped, short-lived, auditable, and limited by policy, mandate, and job mode.
+- Product user mandates may be standing, broad, and revocable. Derived tool
+  grants remain server-owned, project/job-scoped, short-lived, auditable, and
+  limited by policy, mandate version, trigger, revision, and runtime limits.
 - Validate tool inputs strictly. A model request may narrow authority but never create or expand it.
 - Read `docs/model-provider-boundary.md` before implementing model orchestration.
 - Read `docs/mcp-and-integrations.md` before changing MCP or account bindings.
